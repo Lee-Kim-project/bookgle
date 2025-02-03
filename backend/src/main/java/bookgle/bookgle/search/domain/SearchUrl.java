@@ -1,10 +1,18 @@
 package bookgle.bookgle.search.domain;
 
+import lombok.Getter;
+
+@Getter
 public enum SearchUrl {
+    // base url
+    BASE_URL("http://data4library.kr/api"),
     // 도서관별 소장 도서 조회
-    BOOKS_BY_LIBRARY("http://data4library.kr/api/itemSrch?authKey=[발급받은키]&libCode=[도서관코드]&type=ALL"),
+    BOOKS_BY_LIBRARY("/itemSrch"),
     // 도서 소장 도서관 조회
-    ALL_LIBRARY_HAS_THE_BOOK("http://data4library.kr/api/libSrchByBook?authKey=[발급받은키]&isbn=[ISBN]&region=[지역코드]");
+    ALL_LIBRARY_HAS_THE_BOOK("/libSrchByBook"),
+    // 도서 정보 조회
+    BOOKS_INFO("/srchBooks");
+
 
     private final String url;
     SearchUrl(String url) {
