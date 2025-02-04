@@ -1,14 +1,13 @@
 package bookgle.bookgle.search.service;
 
-import bookgle.bookgle.search.domain.ApiConfig;
-import bookgle.bookgle.search.domain.Book;
-import bookgle.bookgle.search.domain.SearchUrl;
+import bookgle.bookgle.search.domain.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,5 +48,35 @@ public class SearchService {
         }
 
         return books;
+    }
+
+
+
+    // 유저가 검색한 책을 소장하고 있는 도서관들을 찾습니다.
+    public void searchLibrary(String isbn) throws IOException {
+        JsonNode response = webClient
+                .get()
+                .uri(uriBuilder -> uriBuilder
+                        .path(SearchUrl.ALL_LIBRARY_HAS_THE_BOOK.getUrl())
+                        .queryParam("authKey", apiConfig.getApiKey())
+                        .queryParam("isbn", isbn)
+                        .queryParam("region", RegionCode.SEOUL.getCode())
+                        .queryParam("pageSize", 100)
+                        .queryParam("format", "json")
+                        .build())
+                .retrieve()
+                .bodyToMono(JsonNode.class)
+                .block();
+
+        // json 파싱
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<Library> libraries = new ArrayList<>();
+        for (JsonNode lib : response.get("response").get("libs")) {
+            libraries.add(objectMapper.readValue(lib.get("lib").toString(), Library.class));
+        }
+
+//        // 테스트 출력용
+//        for (Library lib : libraries)
+//            System.out.println(lib.getName());
     }
 }
