@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <title>도서관 지도</title>
+    <script th:src="@{https://oapi.map.naver.com/openapi/v3/maps.js(ncpClientId=${clientId})}"></script>
+</head>
+<body>
+<div id="map" style="width:100%;height:400px;"></div>
+
+<script>
+        var mapOptions = {
+            center: new naver.maps.LatLng(37.3595704, 127.105399),
+            zoom: 10
+        };
+
+        var map = new naver.maps.Map('map', mapOptions);
+
+        const infowindow = new naver.maps.InfoWindow();
+
+</script>
+
+<div th:each="library : ${libraries}">
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        (function() { // IIFE 시작
+            var name = [[${library.getName()}]];
+            var address = [[${library.getAddress()}]];
+            var tel = [[${library.getTel()}]];
+            var homepage = [[${library.getHomepage()}]];
+            var operatingTime = [[${library.getOperatingTime()}]];
+            var latitude = [[${library.getLatitude()}]];
+            var longitude = [[${library.getLongitude()}]];
+
+            var marker = new naver.maps.Marker({
+                position: new naver.maps.LatLng(latitude, longitude),
+                map: map
+            });
+
+        const content = `
+              <div style="padding:5px;">
+                <h3>${name}</h3>
+                <p>주소: ${address}</p>
+                <p>전화번호: ${tel}</p>
+                <p>홈페이지: <a href="${homepage}" target="_blank">${homepage}</a></p>
+                <p>운영시간: ${operatingTime}</p>
+              </div>
+            `;
+
+<!--            addListener는 비동기적으로 실행되는 콜백함수이기에, 즉시실행함수(IIFE)를 사용하지 않으면, 반복문의 마지막 marker에 대한 정보만 가지고 실행하게된다.-->
+            naver.maps.Event.addListener(marker, 'click', () => {
+                infowindow.setContent(content);
+                infowindow.open(map, marker);
+            });
+        })(); // IIFE 종료
+        /*]]>*/
+    </script>
+</div>
+
+</body>
+</html>
