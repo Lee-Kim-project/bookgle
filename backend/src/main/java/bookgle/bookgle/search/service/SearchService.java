@@ -1,5 +1,6 @@
 package bookgle.bookgle.search.service;
 
+import bookgle.bookgle.search.config.NaruProperties;
 import bookgle.bookgle.search.domain.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -14,11 +15,11 @@ import java.util.List;
 @Service
 public class SearchService {
 
-    private final ApiConfig apiConfig;
+    private final NaruProperties naruProperties;
     private final WebClient webClient;
 
-    public SearchService(ApiConfig apiConfig) {
-        this.apiConfig = apiConfig;
+    public SearchService(NaruProperties apiConfig) {
+        this.naruProperties = apiConfig;
         // baseurl 지정해서 생성
         this.webClient = WebClient.builder()
                 .baseUrl(SearchUrl.BASE_URL.getUrl())
@@ -31,7 +32,7 @@ public class SearchService {
                 .get()
                 .uri(uriBuilder -> uriBuilder
                         .path(SearchUrl.BOOKS_INFO.getUrl())
-                        .queryParam("authKey", apiConfig.getApiKey())
+                        .queryParam("authKey", naruProperties.getApiKey())
                         .queryParam("title", title)
                         .queryParam("pageSize", 100)
                         .queryParam("format", "json")
@@ -50,17 +51,15 @@ public class SearchService {
         return books;
     }
 
-
-
     // 유저가 검색한 책을 소장하고 있는 도서관들을 찾습니다.
-    public void searchLibrary(String isbn) throws IOException {
+    public List<Library> searchLibraries(String isbn) throws IOException {
         JsonNode response = webClient
                 .get()
                 .uri(uriBuilder -> uriBuilder
                         .path(SearchUrl.ALL_LIBRARY_HAS_THE_BOOK.getUrl())
-                        .queryParam("authKey", apiConfig.getApiKey())
+                        .queryParam("authKey", naruProperties.getApiKey())
                         .queryParam("isbn", isbn)
-                        .queryParam("region", RegionCode.SEOUL.getCode())
+                        .queryParam("region", CityCode.SEOUL.getCode())
                         .queryParam("pageSize", 100)
                         .queryParam("format", "json")
                         .build())
@@ -76,7 +75,12 @@ public class SearchService {
         }
 
 //        // 테스트 출력용
-//        for (Library lib : libraries)
-//            System.out.println(lib.getName());
+//        for (Library lib : libraries) {
+//            System.out.print(lib.getName());
+//            System.out.print(lib.getLatitude() + " ");
+//            System.out.println(lib.getLongitude());
+//        }
+
+        return libraries;
     }
 }

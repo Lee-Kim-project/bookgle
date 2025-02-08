@@ -5,8 +5,9 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum RegionCode {
-    SEOUL(11);
+public enum CityCode {
+    SEOUL("서울", 11);
 
+    private final String name;
     private final int code;
 }

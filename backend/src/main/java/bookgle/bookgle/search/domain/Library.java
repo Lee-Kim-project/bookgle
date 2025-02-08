@@ -13,18 +13,22 @@ import lombok.ToString;
 public class Library {
     private final String name;
     private final String address;
+    private final String tel;
     private final String latitude;
     private final String longitude;
     private final String homepage;
+    private final String operatingTime;
 
     @JsonCreator
     public Library(@JsonProperty("libName") String name, @JsonProperty("address") String address,
-                   @JsonProperty("latitude") String latitude, @JsonProperty("longitude") String longitude,
-                   @JsonProperty("homepage") String homepage) {
+                   @JsonProperty("tel") String tel, @JsonProperty("latitude") String latitude, @JsonProperty("longitude") String longitude,
+                   @JsonProperty("homepage") String homepage, @JsonProperty("operatingTime") String operatingTime) {
         this.name = name;
         this.address = address;
+        this.tel = tel;
         this.latitude = latitude;
         this.longitude = longitude;
         this.homepage = homepage;
+        this.operatingTime = operatingTime;
     }
 }
