@@ -8,7 +8,7 @@
     <script th:src="@{https://oapi.map.naver.com/openapi/v3/maps.js(ncpClientId=${clientId})}"></script>
 </head>
 <body>
-<div id="map" style="width:100%;height:400px;"></div>
+<div id="map" style="width:100%;height:800px;"></div>
 
 <script>
         var mapOptions = {
@@ -46,6 +46,7 @@
                 <p>전화번호: ${tel}</p>
                 <p>홈페이지: <a href="${homepage}" target="_blank">${homepage}</a></p>
                 <p>운영시간: ${operatingTime}</p>
+                <button id="myButton">대출가능 여부 확인</button>
               </div>
             `;
 

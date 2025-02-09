@@ -75,27 +75,24 @@ public class SearchService {
             libraries.add(objectMapper.readValue(lib.get("lib").toString(), Library.class));
         }
 
-        List<Library> librariesByRegion = searchLibrariesByRegion(libraries, regions);
+        libraries = searchLibrariesByRegion(libraries, regions);
 
-//        // 테스트 출력용
-//        for (Library lib : libraries) {
-//            System.out.print(lib.getName());
-//            System.out.print(lib.getLatitude() + " ");
-//            System.out.println(lib.getLongitude());
-//        }
-
-        return librariesByRegion;
+        return libraries;
     }
 
     // 유저가 선택한 지역(구)에 있는 도서관들을 찾습니다.
     public List<Library> searchLibrariesByRegion(List<Library> libraries, String[] regions) {
-        List<Library> librariesByRegion = new ArrayList<>();
-        for (Library library : libraries) {
-            String district = library.getAddress().split(" ")[1];
-            if (Arrays.stream(regions).anyMatch(region -> region.equals(district)))
-                librariesByRegion.add(library);
+        if (Arrays.stream(regions).noneMatch(region -> region.equals("서울"))) {
+            List<Library> librariesByRegion = new ArrayList<>();
+            for (Library library : libraries) {
+                // 모든 주소가 "시 구 ~" 형태이므로 1번째 인덱스에 있는 값이 구에 대한 정보
+                String district = library.getAddress().split(" ")[1];
+                if (Arrays.stream(regions).anyMatch(region -> region.equals(district)))
+                    librariesByRegion.add(library);
+            }
+            libraries = librariesByRegion;
         }
 
-        return librariesByRegion;
+        return libraries;
     }
 }
