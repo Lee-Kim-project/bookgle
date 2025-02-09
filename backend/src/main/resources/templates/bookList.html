@@ -17,7 +17,7 @@
 
     <div>
         <h4>
-            <a th:href="@{/search/libraries(isbn=${book.getIsbn()})}" th:text="${book.getTitle()}"></a>
+            <a th:href="@{/search/libraries(isbn=${book.getIsbn()}, regions=${regions})}" th:text="${book.getTitle()}"></a>
         </h4>
         <p th:text="${book.getAuthors()}"></p>
         <p th:text="${book.getPublisher()}"></p>

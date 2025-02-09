@@ -10,6 +10,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -51,8 +52,8 @@ public class SearchService {
         return books;
     }
 
-    // 유저가 검색한 책을 소장하고 있는 도서관들을 찾습니다.
-    public List<Library> searchLibraries(String isbn) throws IOException {
+    // 유저가 검색한 책을 소장하고 있는 도서관들을 유저가 선택한 지역에 기반해서 찾습니다.
+    public List<Library> searchLibraries(String isbn, String[] regions) throws IOException {
         JsonNode response = webClient
                 .get()
                 .uri(uriBuilder -> uriBuilder
@@ -74,6 +75,8 @@ public class SearchService {
             libraries.add(objectMapper.readValue(lib.get("lib").toString(), Library.class));
         }
 
+        List<Library> librariesByRegion = searchLibrariesByRegion(libraries, regions);
+
 //        // 테스트 출력용
 //        for (Library lib : libraries) {
 //            System.out.print(lib.getName());
@@ -81,6 +84,18 @@ public class SearchService {
 //            System.out.println(lib.getLongitude());
 //        }
 
-        return libraries;
+        return librariesByRegion;
+    }
+
+    // 유저가 선택한 지역(구)에 있는 도서관들을 찾습니다.
+    public List<Library> searchLibrariesByRegion(List<Library> libraries, String[] regions) {
+        List<Library> librariesByRegion = new ArrayList<>();
+        for (Library library : libraries) {
+            String district = library.getAddress().split(" ")[1];
+            if (Arrays.stream(regions).anyMatch(region -> region.equals(district)))
+                librariesByRegion.add(library);
+        }
+
+        return librariesByRegion;
     }
 }
