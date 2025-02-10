@@ -26,6 +26,7 @@
     <script th:inline="javascript">
         /*<![CDATA[*/
         (function() { // IIFE 시작
+            var libCode = [[${library.getCode()}]];
             var name = [[${library.getName()}]];
             var address = [[${library.getAddress()}]];
             var tel = [[${library.getTel()}]];
@@ -39,14 +40,16 @@
                 map: map
             });
 
-        const content = `
+        let content = `
               <div style="padding:5px;">
                 <h3>${name}</h3>
                 <p>주소: ${address}</p>
                 <p>전화번호: ${tel}</p>
                 <p>홈페이지: <a href="${homepage}" target="_blank">${homepage}</a></p>
                 <p>운영시간: ${operatingTime}</p>
-                <button id="myButton">대출가능 여부 확인</button>
+                    <button id="checkButton", type="button">대출가능 여부 확인</button>
+                <div id="additionalInfo">
+                </div>
               </div>
             `;
 
@@ -54,6 +57,28 @@
             naver.maps.Event.addListener(marker, 'click', () => {
                 infowindow.setContent(content);
                 infowindow.open(map, marker);
+
+                let button = document.getElementById('checkButton');
+                let additionalInfo = document.getElementById('additionalInfo');
+
+                button.addEventListener('click', async (event) => {
+<!--                    event.preventDefault();-->
+                    const params = new URLSearchParams();
+                    params.append('libCode', libCode);
+                    params.append('isbn', [[${isbn}]]);
+                    const url = `/search/isAvailable?${params.toString()}`;
+                    try {
+                            const response = await fetch(url);
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! status: ${response.status}`);
+                            }
+                            const data = await response.text(); // 서버 응답을 텍스트로 파싱
+                            additionalInfo.innerHTML = data;
+                        } catch (error) {
+                            console.error('Error:', error);
+                            additionalInfo.innerHTML = "Error occurred. Please try again."; // 에러 메시지 표시
+                        }
+                });
             });
         })(); // IIFE 종료
         /*]]>*/
