@@ -95,4 +95,24 @@ public class SearchService {
 
         return libraries;
     }
+
+    public boolean isBookAvailable(String libCode, String isbn) {
+        JsonNode response = webClient
+                .get()
+                .uri(uriBuilder -> uriBuilder
+                        .path(SearchUrl.IS_BOOK_AVAILABLE.getUrl())
+                        .queryParam("authKey", naruProperties.getApiKey())
+                        .queryParam("isbn13", isbn)
+                        .queryParam("libCode", libCode)
+                        .queryParam("format", "json")
+                        .build())
+                .retrieve()
+                .bodyToMono(JsonNode.class)
+                .block();
+
+        String loanAvailable = response.get("response").get("result").get("loanAvailable").textValue();
+        if (loanAvailable.equals("Y"))
+            return true;
+        return false;
+    }
 }
