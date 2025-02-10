@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.IOException;
 import java.util.List;
@@ -45,6 +46,16 @@ public class SearchController {
         // map에 도서관들을 마커로 표시해서 보여준다.
         model.addAttribute("libraries", libraries);
         model.addAttribute("clientId", naverMapsProperties.getClientId());
+        model.addAttribute("isbn", isbn);
         return "map.html";
+    }
+
+    @GetMapping("/search/isAvailable")
+    @ResponseBody
+    public String checkAvailable(String libCode, String isbn) {
+        boolean result = searchService.isBookAvailable(libCode, isbn);
+        if (result)
+            return "대출 가능";
+        return "대출 불가";
     }
 }
