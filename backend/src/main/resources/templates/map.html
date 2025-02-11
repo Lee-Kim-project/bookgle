@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <style>
+    html, body {
+      height: 100%; /* html과 body의 높이를 100%로 설정 */
+      margin: 0; /* body의 기본 마진 제거 */
+    }
+    body {
+      width: 100%; /* body의 너비를 100%로 설정 */
+    }
+    </style>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
@@ -8,7 +17,7 @@
     <script th:src="@{https://oapi.map.naver.com/openapi/v3/maps.js(ncpClientId=${clientId})}"></script>
 </head>
 <body>
-<div id="map" style="width:100%;height:800px;"></div>
+<div id="map" style="width:100%;height:100%;"></div>
 
 <script>
         var mapOptions = {
@@ -41,13 +50,14 @@
             });
 
         let content = `
-              <div style="padding:5px;">
+              <div style="max-width: 100%; max-height: 800px; overflow: auto; padding:5px;">
                 <h3>${name}</h3>
                 <p>주소: ${address}</p>
                 <p>전화번호: ${tel}</p>
                 <p>홈페이지: <a href="${homepage}" target="_blank">${homepage}</a></p>
                 <p>운영시간: ${operatingTime}</p>
-                    <button id="checkButton", type="button">대출가능 여부 확인</button>
+                <button id="checkButton", type="button">대출가능 여부 확인</button>
+                <button id="closeButton" style="position: absolute; top:5px; right:5px">X</button>
                 <div id="additionalInfo">
                 </div>
               </div>
@@ -57,6 +67,11 @@
             naver.maps.Event.addListener(marker, 'click', () => {
                 infowindow.setContent(content);
                 infowindow.open(map, marker);
+
+                const closeButton = document.getElementById('closeButton');
+                closeButton.addEventListener('click', () => {
+                    infowindow.close();
+                });
 
                 let button = document.getElementById('checkButton');
                 let additionalInfo = document.getElementById('additionalInfo');
@@ -80,6 +95,7 @@
                         }
                 });
             });
+
         })(); // IIFE 종료
         /*]]>*/
     </script>
