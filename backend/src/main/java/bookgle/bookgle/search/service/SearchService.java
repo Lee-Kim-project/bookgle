@@ -1,10 +1,16 @@
 package bookgle.bookgle.search.service;
 
+import bookgle.bookgle.exception.ServiceException;
 import bookgle.bookgle.search.config.NaruProperties;
-import bookgle.bookgle.search.domain.*;
+import bookgle.bookgle.search.domain.Book;
+import bookgle.bookgle.search.domain.CityCode;
+import bookgle.bookgle.search.domain.Library;
+import bookgle.bookgle.search.domain.SearchUrl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.NullNode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -12,6 +18,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+
+import static bookgle.bookgle.exception.ExceptionStatus.NOT_FOUND_BOOK;
 
 @Service
 public class SearchService {
@@ -29,7 +38,7 @@ public class SearchService {
 
     // 유저가 입력한 책 제목과 동일한 제목을 가진 책들을 찾습니다.
     public List<Book> searchBooks(String title) throws JsonProcessingException {
-        JsonNode response = webClient
+        Optional<JsonNode> response = Optional.ofNullable(webClient
                 .get()
                 .uri(uriBuilder -> uriBuilder
                         .path(SearchUrl.BOOKS_INFO.getUrl())
@@ -40,13 +49,17 @@ public class SearchService {
                         .build())
                 .retrieve()
                 .bodyToMono(JsonNode.class)
-                .block();
+                .block());
 
         // json 파싱
-        ObjectMapper objectMapper = new ObjectMapper();
         List<Book> books = new ArrayList<>();
-        for (JsonNode doc : response.get("response").get("docs")) {
-            books.add(objectMapper.readValue(doc.get("doc").toString(), Book.class));
+        if (response.isPresent()) {
+            JsonNode docs = response.get().get("response").get("docs");
+//            JsonNode docs = response.orElseThrow(() -> new ServiceException(NOT_FOUND_BOOK)).get("response").get("docs");
+            ObjectMapper objectMapper = new ObjectMapper();
+            for (JsonNode doc : docs) {
+                books.add(objectMapper.readValue(doc.get("doc").toString(), Book.class));
+            }
         }
 
         return books;
