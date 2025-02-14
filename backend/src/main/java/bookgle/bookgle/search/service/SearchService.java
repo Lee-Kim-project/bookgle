@@ -38,7 +38,7 @@ public class SearchService {
                 .uri(uriBuilder -> uriBuilder
                         .path(SearchUrl.BOOKS_INFO.getUrl())
                         .queryParam("authKey", naruProperties.getApiKey())
-                        .queryParam("title", title)
+                        .queryParam("title", "\"" + title + "\"")
                         .queryParam("pageSize", 100)
                         .queryParam("format", "json")
                         .build())
