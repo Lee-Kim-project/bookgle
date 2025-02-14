@@ -1,6 +1,5 @@
 package bookgle.bookgle.search.service;
 
-import bookgle.bookgle.exception.ServiceException;
 import bookgle.bookgle.search.config.NaruProperties;
 import bookgle.bookgle.search.domain.Book;
 import bookgle.bookgle.search.domain.CityCode;
@@ -9,8 +8,6 @@ import bookgle.bookgle.search.domain.SearchUrl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.NullNode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -19,8 +16,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
-import static bookgle.bookgle.exception.ExceptionStatus.NOT_FOUND_BOOK;
 
 @Service
 public class SearchService {
