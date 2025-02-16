@@ -1,0 +1,24 @@
+services:
+  spring-server:
+    image: bookgle:1
+    networks:
+      - bookgle
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+
+  nginx:
+    image: nginx:1
+    ports:
+      - 80:80
+    networks:
+      - bookgle
+    build: 
+      context: ./nginx
+      dockerfile: Dockerfile
+    depends_on:
+      - spring-server
+
+networks:
+  bookgle:
+    driver: bridge
