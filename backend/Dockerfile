@@ -10,7 +10,8 @@ RUN wget -O /etc/apk/keys/amazoncorretto.rsa.pub https://apk.corretto.aws/amazon
 ENV JAVA_HOME=/usr/lib/jvm/java-17-amazon-corretto
 ENV PATH=$JAVA_HOME/bin:$PATH
 
-COPY . .
+COPY backend .
+COPY config/application.yml src/main/resources/application.yml
 RUN ["./gradlew", "clean", "build"]
 
 #--------------------------------------

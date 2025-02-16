@@ -4,8 +4,9 @@ services:
     networks:
       - bookgle
     build:
-      context: ./backend
-      dockerfile: Dockerfile
+      # context: ./backend
+      context: .
+      dockerfile: backend/Dockerfile
     restart: always
     # develop:
     #   watch:
