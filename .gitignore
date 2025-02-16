@@ -4,7 +4,7 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
-**/.DS_Store
+*.DS_Store
 
 ### STS ###
 .apt_generated
@@ -19,7 +19,7 @@ bin/
 !**/src/test/**/bin/
 
 ### IntelliJ IDEA ###
-.idea
+**/.idea/*
 *.iws
 *.iml
 *.ipr
@@ -38,8 +38,8 @@ out/
 .vscode/
 
 ### properties ###
-*/application.properties
-*/application.yml
-src/main/resources/application.yml
-src/main/resources/application.properties
+**/application.properties
+**/application.yml
+# src/main/resources/application.yml
+# src/main/resources/application.properties
 
