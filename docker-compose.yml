@@ -6,6 +6,12 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
+    restart: always
+    # develop:
+    #   watch:
+    #     - action: sync+restart
+    #       path: ./backend
+    #       target: ./backend
 
   nginx:
     image: nginx:1
@@ -18,6 +24,12 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - spring-server
+    restart: always
+    # develop:
+    #   watch:
+    #     - action: sync+restart
+    #       path: ./nginx
+    #       target: .
 
 networks:
   bookgle:
