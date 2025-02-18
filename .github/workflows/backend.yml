@@ -1,0 +1,45 @@
+name: backend CI
+
+on:
+  push:
+    branches: [main] # main 브랜치에 push 이벤트 발생 시 실행
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true # 서브모듈 checkout
+
+      - name: SSH Key 설정
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.BACKEND_CONFIG_PRIVATE_KEY }} # Github Secrets에 저장된 SSH Key
+
+		  #submodule의 내용을 update한다.
+      - name: Update config submodule
+        run: |
+          git submodule update --init
+
+		  #컨테이너에서 Corretto JDK를 사용하도록 설정한다.
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+            java-version: "17"
+            distribution: "corretto"
+            
+		  #backend 디렉토리로 이동하여 Gradle 빌드를 실행한다.
+      - name: Build with Gradle
+        run: |
+          cd backend
+          chmod +x gradlew
+          ./gradlew build
+        shell: bash
+
+      - name: Gradle Build
+        run: ./gradlew build
+
+      # - name: 배포 (필요시)
+      #   run: ...
