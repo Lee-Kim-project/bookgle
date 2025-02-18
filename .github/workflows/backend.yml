@@ -9,10 +9,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: SSH Key 설정
-        uses: shimataro/ssh-key-action@v2
-        with:
-          key: ${{ secrets.BACKEND_CONFIG_PRIVATE_KEY }} # Github Secrets에 저장된 SSH Key
+      # - name: SSH Key 설정
+      #   uses: shimataro/ssh-key-action@v2
+      #   with:
+      #     key: ${{ secrets.BACKEND_CONFIG_PRIVATE_KEY }} # Github Secrets에 저장된 SSH Key
+
+      - name: Setup SSH key to access private submodule
+        run: |
+          mkdir -p ~/.ssh
+          echo '${{ secrets.BACKEND_CONFIG_PRIVATE_KEY }}' ~/.ssh/id_rsa
+          chmod 400 ~/.ssh/id_rsa
 
       - uses: actions/checkout@v3
         with:
