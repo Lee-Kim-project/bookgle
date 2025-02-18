@@ -9,14 +9,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-        with:
-          submodules: true # 서브모듈 checkout
-
       - name: SSH Key 설정
         uses: shimataro/ssh-key-action@v2
         with:
           key: ${{ secrets.BACKEND_CONFIG_PRIVATE_KEY }} # Github Secrets에 저장된 SSH Key
+
+      - uses: actions/checkout@v3
+        with:
+          submodules: true # 서브모듈 checkout
 
       - name: Update config submodule
         run: |
