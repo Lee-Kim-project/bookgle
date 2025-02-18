@@ -1,3 +1,4 @@
 [submodule "config"]
 	path = config
-	url = https://github.com/Lee-Kim-project/config
+	# url = https://github.com/Lee-Kim-project/config.git
+	url = git@github.com:Lee-Kim-project/config.git
