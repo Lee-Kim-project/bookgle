@@ -17,7 +17,7 @@ jobs:
       - name: Setup SSH key to access private submodule
         run: |
           mkdir -p ~/.ssh
-          echo '${{ secrets.BACKEND_CONFIG_PRIVATE_KEY }}' ~/.ssh/id_rsa
+          echo '${{ secrets.BACKEND_CONFIG_PRIVATE_KEY }}' > ~/.ssh/id_rsa
           chmod 400 ~/.ssh/id_rsa
 
       - uses: actions/checkout@v3
