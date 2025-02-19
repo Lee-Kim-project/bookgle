@@ -7,7 +7,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    env:
+      SPRING_CONFIG_ADDITIONAL_LOCATION: "file:/config/"
+      
     steps:
       # - name: SSH Key 설정
       #   uses: shimataro/ssh-key-action@v2
