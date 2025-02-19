@@ -44,8 +44,5 @@ jobs:
           ./gradlew build
         shell: bash
 
-      - name: Gradle Build
-        run: ./gradlew build
-
       # - name: 배포 (필요시)
       #   run: ...
