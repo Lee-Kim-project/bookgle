@@ -7,11 +7,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      SPRING_CONFIG_ADDITIONAL_LOCATION: "file:/config/"
-      
     steps:
-
       - name: Set Spring Config Location
         run: echo "SPRING_CONFIG_ADDITIONAL_LOCATION=file:${{ github.workspace }}/config/" >> $GITHUB_ENV
       # - name: SSH Key 설정
@@ -28,7 +24,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           submodules: true # 서브모듈 checkout
-          ssh-key: ${{ secrets.BACKEND_CONFIG_PRIVATE_KEY }}
+          # ssh-key: ${{ secrets.BACKEND_CONFIG_PRIVATE_KEY }}
 
       - name: Update config submodule
         run: |
