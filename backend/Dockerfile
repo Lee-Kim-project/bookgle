@@ -15,7 +15,7 @@ ENV JAVA_HOME=/usr/lib/jvm/java-17-amazon-corretto
 ENV PATH=$JAVA_HOME/bin:$PATH
 ENV SPRING_CONFIG_ADDITIONAL_LOCATION=file:/config/
 
-RUN ["./gradlew", "clean", "build"]
+RUN ["./gradlew", "build"]
 
 #--------------------------------------
 
