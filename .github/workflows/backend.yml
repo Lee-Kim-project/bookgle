@@ -15,16 +15,16 @@ jobs:
       #   with:
       #     key: ${{ secrets.BACKEND_CONFIG_PRIVATE_KEY }} # Github Secrets에 저장된 SSH Key
 
-      - name: Setup SSH key to access private submodule
-        run: |
-          mkdir -p ~/.ssh
-          echo '${{ secrets.BACKEND_CONFIG_PRIVATE_KEY }}' > ~/.ssh/id_rsa
-          chmod 400 ~/.ssh/id_rsa
+      # - name: Setup SSH key to access private submodule
+      #   run: |
+      #     mkdir -p ~/.ssh
+      #     echo '${{ secrets.BACKEND_CONFIG_PRIVATE_KEY }}' > ~/.ssh/id_rsa
+      #     chmod 400 ~/.ssh/id_rsa
 
       - uses: actions/checkout@v3
         with:
           submodules: true # 서브모듈 checkout
-          # ssh-key: ${{ secrets.BACKEND_CONFIG_PRIVATE_KEY }}
+          ssh-key: ${{ secrets.BACKEND_CONFIG_PRIVATE_KEY }}
 
       - name: Update config submodule
         run: |
