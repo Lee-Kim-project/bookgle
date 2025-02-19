@@ -11,6 +11,9 @@ jobs:
       SPRING_CONFIG_ADDITIONAL_LOCATION: "file:/config/"
       
     steps:
+
+      - name: Set Spring Config Location
+        run: echo "SPRING_CONFIG_ADDITIONAL_LOCATION=file:${{ github.workspace }}/config/application.yml" >> $GITHUB_ENV
       # - name: SSH Key 설정
       #   uses: shimataro/ssh-key-action@v2
       #   with:
