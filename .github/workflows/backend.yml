@@ -23,6 +23,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           submodules: true # 서브모듈 checkout
+          ssh-key: ${{ secrets.BACKEND_CONFIG_PRIVATE_KEY }}
 
       - name: Update config submodule
         run: |
