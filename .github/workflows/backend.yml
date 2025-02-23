@@ -43,14 +43,15 @@ jobs:
         id: meta-spring-server
         uses: docker/metadata-action@v5
         with:
-          images: ${{ secrets.DOCKER_USERNAME }}/bookgle/spring-server
+          images: noel95/bookgle/spring-server
           tags: type=sha
 
       - name: Extract metadata for Docker
         id: meta-nginx
         uses: docker/metadata-action@v5
         with:
-          images: ${{ secrets.DOCKER_USERNAME }}/bookgle/nginx
+          # images: ${{ secrets.DOCKER_USERNAME }}/bookgle/nginx
+          images: noel95/bookgle/nginx
           tags: type=sha
 
     # Docker 이미지 빌드 및 푸시
