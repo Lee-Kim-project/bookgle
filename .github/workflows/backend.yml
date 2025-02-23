@@ -44,14 +44,14 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ${{ secrets.DOCKER_USERNAME }}/bookgle
-          tags: spring-server
+          tags: spring-server-${{github.sha}}
 
       - name: Extract metadata for Docker
         id: meta-nginx
         uses: docker/metadata-action@v5
         with:
           images: ${{ secrets.DOCKER_USERNAME }}/bookgle
-          tags: nginx
+          tags: nginx-${{github.sha}}
 
     # Docker 이미지 빌드 및 푸시
       - name: Build and Push Docker Images
