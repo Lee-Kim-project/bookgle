@@ -8,11 +8,6 @@ services:
       context: .
       dockerfile: backend/Dockerfile
     restart: always
-    # develop:
-    #   watch:
-    #     - action: sync+restart
-    #       path: ./backend
-    #       target: ./backend
 
   nginx:
     image: nginx:1
@@ -26,11 +21,6 @@ services:
     depends_on:
       - spring-server
     restart: always
-    # develop:
-    #   watch:
-    #     - action: sync+restart
-    #       path: ./nginx
-    #       target: .
 
 networks:
   bookgle:
