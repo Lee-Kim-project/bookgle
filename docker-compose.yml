@@ -1,6 +1,7 @@
 services:
-  spring-server:
-    image: bookgle:1
+  spring-server-${COMMIT_HASH}:
+    image: ${DOCKER_USERNAME}/bookgle:spring-server
+    # image: bookgle:1
     networks:
       - bookgle
     build:
@@ -9,8 +10,9 @@ services:
       dockerfile: backend/Dockerfile
     restart: always
 
-  nginx:
-    image: nginx:1
+  nginx-${COMMIT_HASH}:
+    image: ${DOCKER_USERNAME}/bookgle:nginx
+    # image: nginx:1
     ports:
       - 80:80
     networks:
