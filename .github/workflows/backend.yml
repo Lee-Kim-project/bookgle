@@ -82,20 +82,21 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_PRIVATE }}
           port: ${{ secrets.SERVER_SSH_PORT }}
+          shell: zsh
           script: |
-            /bin/rm -rf bookgle
-            /bin/mkdir bookgle
+            rm -rf bookgle
+            mkdir bookgle
             cd bookgle
-            /usr/bin/git init
-            /usr/bin/git remote add origin https://github.com/Lee-Kim-project/bookgle.git
-            /usr/bin/git sparse-checkout init --cone
-            /usr/bin/git sparse-checkout set docker-compose-for-deployment.yml
-            /usr/bin/git pull origin main
+            git init
+            git remote add origin https://github.com/Lee-Kim-project/bookgle.git
+            git sparse-checkout init --cone
+            git sparse-checkout set docker-compose-for-deployment.yml
+            git pull origin main
 
             export COMMIT_HASH=$(git log -1 --format=%H)
             source ~/.zshrc
 
-            /bin/mv docker-compose-for-deployment.yml docker-compose.yml.template
-            /opt/homebrew/bin/envsubst < docker-compose.yml.template > docker-compose.yml
+            mv docker-compose-for-deployment.yml docker-compose.yml.template
+            envsubst < docker-compose.yml.template > docker-compose.yml
 
-            /usr/local/bin/docker-compose up -d --pull always
+            docker-compose up -d --pull always
