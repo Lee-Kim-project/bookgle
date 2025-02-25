@@ -74,8 +74,8 @@ jobs:
           tags: ${{ steps.meta-nginx.outputs.tags }}
           images: ${{ steps.meta-nginx.outputs.images }}
         
-      # 최신 이미지를 push한 후, 맥미니에서 pull & restart
-      - name: Deploy to Mac mini
+      # 최신 이미지를 push한 후, server에서 pull & restart
+      - name: Deploy to Server
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SERVER_HOST }}
@@ -84,3 +84,7 @@ jobs:
           port: ${{ secrets.SERVER_SSH_PORT }}
           script: |
             cd bookgle
+            export COMMIT_HASH=$(git log -1 --format=%H)
+            source ~/.zshrc
+
+            docker compose up -d --pull always
