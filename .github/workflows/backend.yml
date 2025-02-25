@@ -83,10 +83,10 @@ jobs:
           key: ${{ secrets.SERVER_SSH_PRIVATE }}
           port: ${{ secrets.SERVER_SSH_PORT }}
           script: |
-            cd bookgle  # 도커 컴포즈 파일이 있는 디렉토리로 이동
+            cd bookgle
             touch .env
             echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" >> .env
             echo "COMMIT_HASH=${{github.sha}}" >> .env
             source .env
 
-            docker compose up -d --pull always  # 도커허브에서 최신 이미지 pull받은 후 컨테이너 재시작
+            docker compose up -d --pull always
