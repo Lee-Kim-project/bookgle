@@ -88,6 +88,6 @@ jobs:
             source ~/.zshrc
 
             mv docker-compose.yml docker-compose.yml.template
-            envsubst < docker-compose.yml.template > docker-compose.yml
+            /opt/homebrew/bin/envsubst < docker-compose.yml.template > docker-compose.yml
 
-            docker compose up -d --pull always
+            /usr/local/bin/docker compose up -d --pull always
