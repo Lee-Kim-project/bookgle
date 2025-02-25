@@ -90,4 +90,4 @@ jobs:
             mv docker-compose.yml docker-compose.yml.template
             /opt/homebrew/bin/envsubst < docker-compose.yml.template > docker-compose.yml
 
-            /usr/local/bin/docker compose up -d --pull always
+            /usr/local/bin/docker-compose up -d --pull always
