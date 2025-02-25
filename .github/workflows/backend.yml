@@ -84,9 +84,3 @@ jobs:
           port: ${{ secrets.SERVER_SSH_PORT }}
           script: |
             cd bookgle
-            touch .env
-            echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" >> .env
-            echo "COMMIT_HASH=${{github.sha}}" >> .env
-            source .env
-
-            docker compose up -d --pull always
