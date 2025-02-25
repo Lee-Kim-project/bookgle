@@ -81,6 +81,7 @@ jobs:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_PRIVATE }}
+          port: ${{ secrets.SERVER_SSH_PORT }}
           script: |
             cd bookgle  # 도커 컴포즈 파일이 있는 디렉토리로 이동
             touch .env
