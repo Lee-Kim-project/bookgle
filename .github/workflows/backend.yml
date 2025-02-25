@@ -93,6 +93,7 @@ jobs:
             git pull origin main
 
             export COMMIT_HASH=$(git log -1 --format=%H)
+            export PATH=/usr/local/bin/docker-credential-desktop
             source ~/.zshrc
 
             /bin/mv docker-compose-for-deployment.yml docker-compose.yml.template
