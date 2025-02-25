@@ -83,17 +83,16 @@ jobs:
           key: ${{ secrets.SERVER_SSH_PRIVATE }}
           port: ${{ secrets.SERVER_SSH_PORT }}
           script: |
-            rm -rf bookgle
-            mkdir bookgle
+            /bin/rm -rf bookgle
+            /bin/mkdir bookgle
             cd bookgle
-            git init
-            git remote add origin https://github.com/Lee-Kim-project/bookgle.git
-            git sparse-checkout init --cone
-            git sparse-checkout set docker-compose-for-deployment.yml
-            git pull origin main
+            /usr/bin/git init
+            /usr/bin/git remote add origin https://github.com/Lee-Kim-project/bookgle.git
+            /usr/bin/git sparse-checkout init --cone
+            /usr/bin/git sparse-checkout set docker-compose-for-deployment.yml
+            /usr/bin/git pull origin main
 
             export COMMIT_HASH=$(git log -1 --format=%H)
-            export PATH=/usr/local/bin/docker-credential-desktop
             source ~/.zshrc
 
             /bin/mv docker-compose-for-deployment.yml docker-compose.yml.template
