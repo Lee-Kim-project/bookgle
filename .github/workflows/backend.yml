@@ -87,4 +87,7 @@ jobs:
             export COMMIT_HASH=$(git log -1 --format=%H)
             source ~/.zshrc
 
+            mv docker-compose.yml docker-compose.yml.template
+            envsubst < docker-compose.yml.template > docker-compose.yml
+
             docker compose up -d --pull always
