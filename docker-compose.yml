@@ -4,7 +4,6 @@ services:
     networks:
       - bookgle
     build:
-      # context: ./backend
       context: .
       dockerfile: backend/Dockerfile
     restart: always
