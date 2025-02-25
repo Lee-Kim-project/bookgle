@@ -88,13 +88,13 @@ jobs:
             git init
             git remote add origin https://github.com/Lee-Kim-project/bookgle.git
             git sparse-checkout init --cone
-            git sparse-checkout set /docker-compose.yml
+            git sparse-checkout set /docker-compose-for-deployment.yml
             git pull origin main
 
             export COMMIT_HASH=$(git log -1 --format=%H)
             source ~/.zshrc
 
-            mv docker-compose.yml docker-compose.yml.template
+            mv ddocker-compose-for-deployment.yml docker-compose.yml.template
             /opt/homebrew/bin/envsubst < docker-compose.yml.template > docker-compose.yml
 
             /usr/local/bin/docker-compose up -d --pull always
