@@ -82,11 +82,6 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_PRIVATE }}
           script: |
-            # 최신 이미지 태그를 가져와서 환경변수로 설정
-            # LATEST_TAG=$(curl -s "https://hub.docker.com/v2/repositories/${{ secrets.DOCKER_USERNAME }}/bookgle/tags?page_size=1" | jq -r '.results[0].name')
-            # echo "IMAGE_TAG=$LATEST_TAG" > .env
-            # source .env
-
             cd bookgle  # 도커 컴포즈 파일이 있는 디렉토리로 이동
             touch .env
             echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" >> .env
