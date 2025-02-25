@@ -98,3 +98,6 @@ jobs:
             /opt/homebrew/bin/envsubst < docker-compose.yml.template > docker-compose.yml
 
             /usr/local/bin/docker-compose up -d --pull always
+
+            cd ~
+            rm -rf bookgle
