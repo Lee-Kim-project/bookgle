@@ -1,5 +1,7 @@
 services:
   spring-server-${COMMIT_HASH}:
+    env_file:
+      - .env
     image: ${DOCKER_USERNAME}/bookgle:spring-server
     # image: bookgle:1
     networks:
@@ -7,6 +9,8 @@ services:
     restart: always
 
   nginx-${COMMIT_HASH}:
+    env_file:
+      - .env
     image: ${DOCKER_USERNAME}/bookgle:nginx
     # image: nginx:1
     ports:
