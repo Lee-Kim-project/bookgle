@@ -100,4 +100,7 @@ jobs:
             /opt/homebrew/bin/envsubst < docker-compose.yml.template > docker-compose.yml
 
             echo ${{ secrets.DOCKER_PASSWORD }} | docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin
+            docker stop $(docker ps -aq)
+            docker rm $(docker ps -aq)
+            docker rmi $(docker images -q)
             /usr/local/bin/docker-compose up -d --pull always
