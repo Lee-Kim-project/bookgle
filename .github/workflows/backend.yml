@@ -98,5 +98,5 @@ jobs:
             /bin/mv docker-compose-for-deployment.yml docker-compose.yml.template
             /opt/homebrew/bin/envsubst < docker-compose.yml.template > docker-compose.yml
 
-            echo ${{ secrets.DOCKER_PASSWORD }} | docker login --username ${{ secrets.DOCKER_EMAIL }} --password-stdin
+            echo ${{ secrets.DOCKER_PASSWORD }} | docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin
             /usr/local/bin/docker-compose up -d --pull always
