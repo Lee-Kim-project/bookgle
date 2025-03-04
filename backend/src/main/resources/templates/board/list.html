@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시판</title>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background-color: #f8f9fa;
+            padding: 20px 0;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        .nav-links a:hover {
+            background-color: #e9ecef;
+        }
+        h1 {
+            color: #343a40;
+        }
+        .board-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .btn:hover {
+            background-color: #0069d9;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+        th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+        tr:hover {
+            background-color: #f8f9fa;
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+        .pagination li {
+            margin: 0 5px;
+        }
+        .pagination a {
+            display: inline-block;
+            padding: 5px 10px;
+            border: 1px solid #dee2e6;
+            text-decoration: none;
+            color: #007bff;
+            border-radius: 4px;
+        }
+        .pagination .active a {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+        .pagination a:hover {
+            background-color: #e9ecef;
+        }
+        .page-size {
+            margin-bottom: 20px;
+        }
+        .page-size select {
+            padding: 5px;
+            border-radius: 4px;
+            border: 1px solid #ced4da;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <div class="container">
+        <h1>Bookgle</h1>
+        <div class="nav-links">
+            <a href="/">홈</a>
+            <a href="/board">게시판</a>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="board-header">
+        <h2>게시판</h2>
+        <a href="/board/new" class="btn">글쓰기</a>
+    </div>
+
+    <div class="page-size">
+        <label for="size">페이지당 게시글 수:</label>
+        <select id="size" onchange="changePageSize()">
+            <option value="10" th:selected="${page.pageSize == 10}">10개</option>
+            <option value="20" th:selected="${page.pageSize == 20}">20개</option>
+            <option value="30" th:selected="${page.pageSize == 30}">30개</option>
+            <option value="50" th:selected="${page.pageSize == 50}">50개</option>
+        </select>
+    </div>
+
+    <table>
+        <thead>
+        <tr>
+            <th>번호</th>
+            <th>제목</th>
+            <th>작성자</th>
+            <th>작성일</th>
+            <th>조회수</th>
+            <th>댓글수</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="board : ${page.content}">
+            <td th:text="${board.id}">1</td>
+            <td><a th:href="@{/board/{id}(id=${board.id})}" th:text="${board.title}">제목</a></td>
+            <td th:text="${board.author}">작성자</td>
+            <td th:text="${#temporals.format(board.createdAt, 'yyyy-MM-dd HH:mm')}">2023-01-01</td>
+            <td th:text="${board.viewCount}">0</td>
+            <td th:text="${board.commentCount}">0</td>
+        </tr>
+        <tr th:if="${page.content.empty}">
+            <td colspan="6" style="text-align: center;">게시글이 없습니다.</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="pagination">
+        <li th:if="${!page.first}">
+            <a th:href="@{/board(page=0, size=${page.pageSize})}">처음</a>
+        </li>
+        <li th:if="${!page.first}">
+            <a th:href="@{/board(page=${page.pageNumber - 1}, size=${page.pageSize})}">이전</a>
+        </li>
+        <li th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}" 
+            th:if="${i >= page.pageNumber - 2 and i <= page.pageNumber + 2}"
+            th:class="${i == page.pageNumber} ? 'active' : ''">
+            <a th:href="@{/board(page=${i}, size=${page.pageSize})}" th:text="${i + 1}">1</a>
+        </li>
+        <li th:if="${!page.last}">
+            <a th:href="@{/board(page=${page.pageNumber + 1}, size=${page.pageSize})}">다음</a>
+        </li>
+        <li th:if="${!page.last}">
+            <a th:href="@{/board(page=${page.totalPages - 1}, size=${page.pageSize})}">마지막</a>
+        </li>
+    </div>
+</div>
+
+<script>
+    function changePageSize() {
+        const size = document.getElementById('size').value;
+        window.location.href = `/board?page=0&size=${size}`;
+    }
+</script>
+</body>
+</html> 

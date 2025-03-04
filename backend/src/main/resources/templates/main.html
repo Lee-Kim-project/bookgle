@@ -5,50 +5,83 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Bookgle</title>
     <link href="/main.css" rel="stylesheet">
-</head>
-<body>
-<form action="/search/books" method="GET">
-    <!--    책 제목 입력-->
-    <input name="title"> <!-- input에 name 속성 있어야 전송이 됨 -->
-    <button type="submit">검색</button>
-    <!--    지역 선택 체크박스-->
-    <div class="checkbox-grid">
-        <label><input type="checkbox" name="region" value="서울">서울 전체</label>
-        <label><input type="checkbox" name="region" value="강남구">강남구</label>
-        <label><input type="checkbox" name="region" value="강동구">강동구</label>
-        <label><input type="checkbox" name="region" value="강북구">강북구</label>
-        <label><input type="checkbox" name="region" value="강서구">강서구</label>
-        <label><input type="checkbox" name="region" value="관악구">관악구</label>
-        <label><input type="checkbox" name="region" value="광진구">광진구</label>
-        <label><input type="checkbox" name="region" value="구로구">구로구</label>
-        <label><input type="checkbox" name="region" value="금천구">금천구</label>
-        <label><input type="checkbox" name="region" value="노원구">노원구</label>
-        <label><input type="checkbox" name="region" value="도봉구">도봉구</label>
-        <label><input type="checkbox" name="region" value="동대문구">동대문구</label>
-        <label><input type="checkbox" name="region" value="동작구">동작구</label>
-        <label><input type="checkbox" name="region" value="마포구">마포구</label>
-        <label><input type="checkbox" name="region" value="서대문구">서대문구</label>
-        <label><input type="checkbox" name="region" value="서초구">서초구</label>
-        <label><input type="checkbox" name="region" value="성동구">성동구</label>
-        <label><input type="checkbox" name="region" value="성북구">성북구</label>
-        <label><input type="checkbox" name="region" value="송파구">송파구</label>
-        <label><input type="checkbox" name="region" value="양천구">양천구</label>
-        <label><input type="checkbox" name="region" value="영등포구">영등포구</label>
-        <label><input type="checkbox" name="region" value="용산구">용산구</label>
-        <label><input type="checkbox" name="region" value="은평구">은평구</label>
-        <label><input type="checkbox" name="region" value="종로구">종로구</label>
-        <label><input type="checkbox" name="region" value="중구">중구</label>
-        <label><input type="checkbox" name="region" value="중랑구">중랑구</label>
-    </div>
     <style>
+        .header {
+            background-color: #f8f9fa;
+            padding: 20px 0;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        .nav-links a:hover {
+            background-color: #e9ecef;
+        }
         .checkbox-grid {
-          display: grid;
-          grid-template-columns: repeat(5, 1fr); /* 4열 격자 */
-          gap: 5px; /* 간격 조절 */
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 5px;
         }
     </style>
-</form>
+</head>
+<body>
+<div class="header">
+    <div class="container">
+        <h1>Bookgle</h1>
+        <div class="nav-links">
+            <a href="/">홈</a>
+            <a href="/board">게시판</a>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <form action="/search/books" method="GET">
+        <!--    책 제목 입력-->
+        <input name="title"> <!-- input에 name 속성 있어야 전송이 됨 -->
+        <button type="submit">검색</button>
+        <!--    지역 선택 체크박스-->
+        <div class="checkbox-grid">
+            <label><input type="checkbox" name="region" value="서울">서울 전체</label>
+            <label><input type="checkbox" name="region" value="강남구">강남구</label>
+            <label><input type="checkbox" name="region" value="강동구">강동구</label>
+            <label><input type="checkbox" name="region" value="강북구">강북구</label>
+            <label><input type="checkbox" name="region" value="강서구">강서구</label>
+            <label><input type="checkbox" name="region" value="관악구">관악구</label>
+            <label><input type="checkbox" name="region" value="광진구">광진구</label>
+            <label><input type="checkbox" name="region" value="구로구">구로구</label>
+            <label><input type="checkbox" name="region" value="금천구">금천구</label>
+            <label><input type="checkbox" name="region" value="노원구">노원구</label>
+            <label><input type="checkbox" name="region" value="도봉구">도봉구</label>
+            <label><input type="checkbox" name="region" value="동대문구">동대문구</label>
+            <label><input type="checkbox" name="region" value="동작구">동작구</label>
+            <label><input type="checkbox" name="region" value="마포구">마포구</label>
+            <label><input type="checkbox" name="region" value="서대문구">서대문구</label>
+            <label><input type="checkbox" name="region" value="서초구">서초구</label>
+            <label><input type="checkbox" name="region" value="성동구">성동구</label>
+            <label><input type="checkbox" name="region" value="성북구">성북구</label>
+            <label><input type="checkbox" name="region" value="송파구">송파구</label>
+            <label><input type="checkbox" name="region" value="양천구">양천구</label>
+            <label><input type="checkbox" name="region" value="영등포구">영등포구</label>
+            <label><input type="checkbox" name="region" value="용산구">용산구</label>
+            <label><input type="checkbox" name="region" value="은평구">은평구</label>
+            <label><input type="checkbox" name="region" value="종로구">종로구</label>
+            <label><input type="checkbox" name="region" value="중구">중구</label>
+            <label><input type="checkbox" name="region" value="중랑구">중랑구</label>
+        </div>
+    </form>
+</div>
 </body>
 </html>
