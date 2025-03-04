@@ -13,7 +13,9 @@ public enum SearchUrl {
     // 도서 정보 조회
     BOOKS_INFO("/srchBooks"),
     // 도서관별 대출 가능여부 조회
-    IS_BOOK_AVAILABLE("/bookExist");
+    IS_BOOK_AVAILABLE("/bookExist"),
+    // 정보공개 도서관 조회
+    ALL_LIBRARIES("/libSrch");
 
 
     private final String url;
