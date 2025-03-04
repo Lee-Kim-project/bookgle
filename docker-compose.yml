@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  mariadb:
+    image: mariadb:latest
+    container_name: bookgle-mariadb
+    restart: always
+    ports:
+      - "53306:3306"  # 더 높은 포트 번호 사용
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: bookgle_board
+      MYSQL_USER: bookgle
+      MYSQL_PASSWORD: bookgle123
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+
+volumes:
+  mariadb_data: 
