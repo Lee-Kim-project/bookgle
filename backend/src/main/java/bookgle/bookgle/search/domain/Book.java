@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 @JsonIgnoreProperties(ignoreUnknown = true) // json에 있는 속성들 중에서 Book 클래스에 정의된 속성들만 가져온다.
-public class 는Book {
+public class Book {
     private final String title;
     private final String authors;
     private final String publisher;
