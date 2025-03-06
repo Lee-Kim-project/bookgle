@@ -1,15 +1,11 @@
 package bookgle.bookgle.search.domain;
 
-import lombok.Getter;
-
 //@Getter
 public enum NaruUrl {
     // scheme
     SCHEME("http"),
     // host
     HOST("data4library.kr"),
-//    BASE_URL("http://data4library.kr/api"),
-//    BASE_URL("/api"),
     // 도서관별 소장 도서 조회
     BOOKS_BY_LIBRARY("/api/itemSrch"),
     // 도서 소장 도서관 조회

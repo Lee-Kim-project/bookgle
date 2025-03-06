@@ -73,6 +73,4 @@ public class SearchController {
             return "대출 가능";
         return "대출 불가";
     }
-
-    // 도서관들의 주소를 위도,경도 좌표로 변환 후 DB에 저장합니다.
 }
