@@ -123,4 +123,69 @@ public class SearchService {
             return true;
         return false;
     }
+
+    public void updateLntLngOfLibraryFromApi(Library library) {
+        List<String> latlng = searchLatLngByAddress(library.getAddress());
+        if (!latlng.isEmpty()) {
+            library.setLatitude(latlng.get(0)); // latitude
+            library.setLongitude(latlng.get(1)); // longitude
+        }
+    }
+
+    // 특정 도시에 있는 모든 도서관들을 찾습니다.
+    public List<Library> searchAllLibrariesByCity(int cityCode) throws JsonProcessingException {
+        JsonNode response = webClient
+                .get()
+                .uri(uriBuilder -> uriBuilder
+                        .scheme(NaruUrl.SCHEME.get())
+                        .host(NaruUrl.HOST.get())
+                        .path(NaruUrl.ALL_LIBRARIES.get())
+                        .queryParam("authKey", naruProperties.getApiKey())
+                        .queryParam("region", cityCode)
+                        .queryParam("pageSize", 400) // 서울지역의 총 도서관 수 344개
+                        .queryParam("format", "json")
+                        .build())
+                .retrieve()
+                .bodyToMono(JsonNode.class)
+                .block();
+
+        List<Library> libraries = new ArrayList<>();
+        for (JsonNode lib : response.get("response").get("libs")) {
+            libraries.add(objectMapper.readValue(lib.get("lib").toString(), Library.class));
+        }
+
+        return libraries;
+    }
+
+    // 주소를 통해 [위도, 경도] 좌표를 찾습니다.
+    public List<String> searchLatLngByAddress(String address) {
+        JsonNode response = webClient
+                .get()
+                .uri(uriBuilder -> uriBuilder
+                        .scheme(NaverMapsUrl.SCHEME.get())
+                        .host(NaverMapsUrl.HOST.get())
+                        .path(NaverMapsUrl.GEOCODING.get())
+                        .queryParam("query", address)
+                        .build())
+                .header("x-ncp-apigw-api-key-id", naverMapsProperties.getClientId())
+                .header("x-ncp-apigw-api-key", naverMapsProperties.getClientSecret())
+                .retrieve()
+                .bodyToMono(JsonNode.class)
+                .block();
+
+        // 도서관 정보나루 api에서 받아온 도서관 주소 중 유효하지 않은 주소가 있다.
+        JsonNode addresses = response.get("addresses").get(0);
+        if (addresses == null) {
+            return new ArrayList<>();
+        }
+
+        String lat = addresses.get("y").asText();
+        String lng = addresses.get("x").asText();
+
+        return Arrays.asList(lat, lng);
+    }
+
+    public void saveLibraries(List<Library> libraries) {
+        libraryRepository.saveAll(libraries);
+    }
 }
