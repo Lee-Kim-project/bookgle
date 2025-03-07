@@ -32,13 +32,13 @@
   <th align="center">기술스택</th>
   <tr>
     <td rowspan="5" align="center">Back-End</td>
-    <td><img src="https://cdn.simpleicons.org/spring/#6DB33F.svg" width="15px" alt="_icon" /> Spring Boot</td>
+    <td><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1RNgloYivDxu-m0uthmQb78H2ULQhv94GZw&s" width="15px" alt="_icon" /> Spring Boot</td>
   </tr>
   <tr>
     <td><img src="https://static-00.iconduck.com/assets.00/mariadb-icon-512x340-txozryr2.png" width="18px" alt="_icon" /> MariaDB</td>
   </tr>
     <tr>
-    <td><img src="[https://static-00.iconduck.com/assets.00/mariadb-icon-512x340-txozryr2.png](https://velog.velcdn.com/images/devharrypmw/post/80aa8caf-3823-4f32-b2b9-787c6fffb89a/image.png)" width="18px" alt="_icon" /> Thymeleaf</td>
+    <td><img src="https://velog.velcdn.com/images/devharrypmw/post/80aa8caf-3823-4f32-b2b9-787c6fffb89a/image.png" width="18px" alt="_icon" /> Thymeleaf</td>
   </tr>
   <tr>
   <tr>
@@ -47,7 +47,7 @@
   </tr>
   <tr>
     <td rowspan="5" align="center">Infra</td>
-    <td><img src="https://cdn.icon-icons.com/icons2/2107/PNG/512/file_type_nginx_icon_130305.png" width="15px" alt="_icon" /> nginx</td>
+    <td><img src="https://logowik.com/content/uploads/images/nginx7281.logowik.com.webp" width="15px" alt="_icon" /> nginx</td>
   </tr>
   <tr>
     <td><img src="https://www.docker.com/wp-content/uploads/2022/03/Moby-logo.png" width="15px" alt="_icon" /> Docker</td>
