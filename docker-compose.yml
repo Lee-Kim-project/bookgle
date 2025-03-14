@@ -6,6 +6,8 @@ services:
     build:
       context: .
       dockerfile: backend/Dockerfile
+    depends_on:
+      - mariadb
     restart: always
 
   nginx:
@@ -22,20 +24,18 @@ services:
     restart: always
 
   mariadb:
-    image: mariadb:latest
-    environment:
-      MYSQL_ROOT_PASSWORD: test123
-      MYSQL_DATABASE: testDB
-      MYSQL_USER: testUser
-      MYSQL_PASSWORD: test123
+    image: mariadb:1
+    build:
+      context: .
+      dockerfile: db/Dockerfile
     ports:
-      - "3306:3306"
+      - 3306:3306
     networks:
       - bookgle
     volumes:
-      - mariadb_data:/var/lib/mysql
+      - bookgle_db:/var/lib/mysql
 volumes:
-    mariadb_data:
+    bookgle_db:
 
 networks:
   bookgle:
