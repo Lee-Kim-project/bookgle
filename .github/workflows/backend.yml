@@ -2,7 +2,10 @@ name: backend CI/CD
 
 on:
   push:
-    branches: [main] # main 브랜치에 push 이벤트 발생 시 실행
+    branches: [main, dev] # main 브랜치에 push 이벤트 발생 시 실행
+  pull_request:
+    branches: [main, dev]
+    types: [opened, synchronize, reopened]
 
 jobs:
   build:
