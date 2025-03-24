@@ -7,5 +7,4 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public class ServiceException extends RuntimeException{
     final private ExceptionStatus status;
-
 }
