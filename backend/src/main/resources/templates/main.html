@@ -7,9 +7,34 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <link href="/main.css" rel="stylesheet">
+    <title>Right Aligned Username</title>
+    <style>
+        .navbar {
+            display: flex;
+            align-items: center;
+        }
+        .navbar .user-info {
+            margin-left: auto;
+        }
+        .navbar .anonymousUser {
+            margin-left: auto;
+        }
+    </style>
 </head>
 <body>
 <form action="/search/books" method="GET">
+    <!--  상단바  -->
+    <div class="navbar">
+        <div sec:authorize="isAuthenticated()" class="user-info">
+            <span sec:authentication="principal.username"></span>
+            <a href="/logout">logout</a>
+            <a href="/user/mypage">my page</a>
+        </div>
+        <div sec:authrize="isAnonymous()" class="anonymousUser">
+            <a href="/register">회원가입</a>
+        </div>
+    </div>
+
     <!--    책 제목 입력-->
     <input name="title"> <!-- input에 name 속성 있어야 전송이 됨 -->
     <button type="submit">검색</button>

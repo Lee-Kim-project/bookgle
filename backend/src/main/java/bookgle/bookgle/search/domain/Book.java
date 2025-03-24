@@ -4,9 +4,11 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
 @JsonIgnoreProperties(ignoreUnknown = true) // json에 있는 속성들 중에서 Book 클래스에 정의된 속성들만 가져온다.
+@ToString
 public class Book {
     private final String title;
     private final String authors;
