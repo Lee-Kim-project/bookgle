@@ -50,7 +50,7 @@ public class SecurityConfig {
         // 경로별 인가 설정
         http.authorizeHttpRequests((auth) -> auth
                 .requestMatchers("/user/mypage").authenticated()
-                .requestMatchers("/admin").hasRole("ADMIN")
+                .requestMatchers("/register", "/login").anonymous()
                 .anyRequest().permitAll());
 
         // jwt filter 등록
