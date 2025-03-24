@@ -1,11 +1,12 @@
 package bookgle.bookgle.user.controller;
 
 import bookgle.bookgle.dto.UserRegisterDto;
+import bookgle.bookgle.exception.ServiceException;
 import bookgle.bookgle.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -14,10 +15,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
-    @Transactional
     @PostMapping("/user/register")
-    public String registerUser(UserRegisterDto userRegisterDto) {
-        userService.registerUser(userRegisterDto);
+    public String registerUser(Model model, UserRegisterDto userRegisterDto) {
+        try {
+            userService.registerUser(userRegisterDto);
+        } catch (Exception e) {
+            if (e instanceof ServiceException) {
+                ServiceException se = (ServiceException) e;
+                model.addAttribute("e", se);
+                return "exception.html";
+            }
+        }
         return "redirect:/login";
     }
 
