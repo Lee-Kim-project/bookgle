@@ -30,7 +30,8 @@
             <a href="/logout">logout</a>
             <a href="/user/mypage">my page</a>
         </div>
-        <div sec:authrize="isAnonymous()" class="anonymousUser">
+        <div sec:authorize="isAnonymous()" class="anonymousUser">
+            <a href="/login">로그인</a>
             <a href="/register">회원가입</a>
         </div>
     </div>
