@@ -41,7 +41,7 @@ public class JwtLogoutFilter extends LogoutFilter {
         public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response,
                                     Authentication authentication) throws IOException, ServletException {
 //            SecurityContextHolder.clearContext();
-            response.sendRedirect("/test/logout");  // 로그아웃 후 로그인 페이지로 리다이렉트
+            response.sendRedirect("/");  // 로그아웃 후 메인 페이지로 리다이렉트
         }
     }
 }
