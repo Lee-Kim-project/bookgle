@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 
 @Getter
-@JsonIgnoreProperties(ignoreUnknown = true) // json파일의 속성들 중에서 Book 클래스에 정의된 속성들만 가져온다.
+@JsonIgnoreProperties(ignoreUnknown = true) // json에 있는 속성들 중에서 Book 클래스에 정의된 속성들만 가져온다.
 public class Book {
     private final String title;
     private final String authors;

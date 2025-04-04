@@ -6,6 +6,8 @@ services:
     build:
       context: .
       dockerfile: backend/Dockerfile
+    depends_on:
+      - mariadb
     restart: always
 
   nginx:
@@ -20,6 +22,20 @@ services:
     depends_on:
       - spring-server
     restart: always
+
+  mariadb:
+    image: mariadb:1
+    build:
+      context: .
+      dockerfile: db/Dockerfile
+    ports:
+      - 3306:3306
+    networks:
+      - bookgle
+    volumes:
+      - bookgle_db:/var/lib/mysql
+volumes:
+    bookgle_db:
 
 networks:
   bookgle:

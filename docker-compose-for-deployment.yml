@@ -1,24 +1,22 @@
 services:
-  spring-server-${COMMIT_HASH}:
+  spring-server${COMMIT_HASH}:
     env_file:
       - .env
     image: ${DOCKER_USERNAME}/bookgle:spring-server
-    # image: bookgle:1
     networks:
       - bookgle
     restart: always
 
-  nginx-${COMMIT_HASH}:
+  nginx${COMMIT_HASH}:
     env_file:
       - .env
     image: ${DOCKER_USERNAME}/bookgle:nginx
-    # image: nginx:1
     ports:
       - 80:80
     networks:
       - bookgle
     depends_on:
-      - spring-server-${COMMIT_HASH}
+      - spring-server${COMMIT_HASH}
     restart: always
 
 networks:
