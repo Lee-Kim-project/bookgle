@@ -1,0 +1,123 @@
+name: backend CD
+
+on:
+  pull_request:
+    branches: [main, dev]
+    types: [opened, synchronize, reopened]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set Spring Config Location
+        run: echo "SPRING_CONFIG_ADDITIONAL_LOCATION=file:${{ github.workspace }}/config/" >> $GITHUB_ENV
+
+      - uses: actions/checkout@v3
+        with:
+          submodules: true # 서브모듈 checkout
+          ssh-key: ${{ secrets.BACKEND_CONFIG_PRIVATE_KEY }}
+
+      - name: Update config submodule
+        run: |
+          git submodule update --init
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: "17"
+          distribution: "corretto"
+
+      - name: Build with Gradle
+        run: |
+          cd backend
+          chmod +x gradlew
+          ./gradlew build -x test
+        shell: bash
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_EMAIL }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Extract metadata for Docker
+        id: meta-spring-server
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ secrets.DOCKER_USERNAME }}/bookgle
+          tags: spring-server
+          # tags: spring-server-${{github.sha}}
+
+      - name: Extract metadata for Docker
+        id: meta-nginx
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ secrets.DOCKER_USERNAME }}/bookgle
+          tags: nginx
+          # tags: nginx-${{github.sha}}
+
+      - name: Extract metadata for Docker
+        id: meta-mariadb
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ secrets.DOCKER_USERNAME }}/bookgle
+          tags: mariadb
+
+      # Docker 이미지 빌드 및 푸시
+      - name: Build and Push Docker Images
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./backend/Dockerfile  # Dockerfile이 위치한 경로 (필요에 따라 수정)
+          push: true
+          tags: ${{ steps.meta-spring-server.outputs.tags }}
+          images: ${{ steps.meta-spring-server.outputs.images }}
+
+      - name: Build and Push Docker Images
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./nginx/Dockerfile  # Dockerfile이 위치한 경로 (필요에 따라 수정)
+          push: true
+          tags: ${{ steps.meta-nginx.outputs.tags }}
+          images: ${{ steps.meta-nginx.outputs.images }}
+
+      - name: Build and Push Docker Images
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./db/Dockerfile  # Dockerfile이 위치한 경로 (필요에 따라 수정)
+          push: true
+          tags: ${{ steps.meta-mariadb.outputs.tags }}
+          images: ${{ steps.meta-mariadb.outputs.images }}
+
+      # 최신 이미지를 push한 후, server에서 pull & restart
+      - name: Deploy to Server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_PRIVATE }}
+          port: ${{ secrets.SERVER_SSH_PORT }}
+          script: |
+#            /bin/rm -rf bookgle
+#            /bin/mkdir bookgle
+#            cd bookgle
+#            /usr/bin/git init
+#            /usr/bin/git remote add origin https://github.com/Lee-Kim-project/bookgle.git
+#            /usr/bin/git sparse-checkout init --cone
+#            /usr/bin/git sparse-checkout set docker-compose-for-deployment.yml
+#            /usr/bin/git pull origin main
+
+            echo "COMMIT_HASH=${{ github.sha }}" > .env
+            # export COMMIT_HASH=$(git log -1 --format=%H)
+            source ~/.zshrc
+
+#            /bin/mv docker-compose-for-deployment.yml docker-compose.yml.template
+#            /opt/homebrew/bin/envsubst < docker-compose.yml.template > docker-compose.yml
+
+            echo ${{ secrets.DOCKER_PASSWORD }} | docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin
+            docker stop $(docker ps -aq)
+            docker rm $(docker ps -aq)
+            docker rmi $(docker images -q)
+            /usr/local/bin/docker-compose up -d --pull always
