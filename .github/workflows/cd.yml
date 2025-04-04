@@ -3,7 +3,7 @@ name: backend CD
 on:
   pull_request:
     branches: [main, dev]
-    types: [opened, synchronize, reopened]
+    types: [opened, reopened]
 
 jobs:
   build:
