@@ -27,7 +27,7 @@ public class SearchController {
 
     // 유저가 검색한 책 제목과 동일한 책들의 목록을 찾아서 보여줍니다.
     @GetMapping("/search/books")
-    public String searchBooks(Model model, String title, String[] region) throws IOException {
+    public String searchBooks(Model model, String title) throws IOException {
         // 유저가 입력한 책 제목으로 isbn을 검색한다.
         List<Book> books;
         try {
@@ -37,14 +37,15 @@ public class SearchController {
         }
 
         // 유저가 입력한 책 제목과 동일한 제목의 책 목록을 보여준다.
+        model.addAttribute("bookTitle", title);
         model.addAttribute("books", books);
         model.addAttribute("booksCount", books.size());
 
-        // 유저가 지역을 선택하지 않았을 경우 서울이 default 값
-        if (region == null)
-            model.addAttribute("regions", "서울");
-        else
-            model.addAttribute("regions", region);
+//        // 유저가 지역을 선택하지 않았을 경우 서울이 default 값
+//        if (region == null)
+//            model.addAttribute("regions", "서울");
+//        else
+//            model.addAttribute("regions", region);
 
         return "bookList.html";
     }
