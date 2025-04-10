@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -9,20 +9,17 @@
     <link href="/css/main.css" rel="stylesheet">
 </head>
 <body>
-<div style="text-align: center; padding: 100px 20px;">
+<div class="container">
     <h1>내 손안의 모든 도서관</h1>
     <p>책을 찾는 완벽한 장소</p>
 
-
     <form action="/search/books" method="GET">
-    <!-- 입력창 -->
-    <div style="display: inline-flex; border: 2px solid #40a9ff; border-radius: 30px; padding: 10px;">
-        <input type="text" name="title" placeholder="도서검색"
-               style="border: none; padding: 0 10px; outline: none; width: 600px;">
-        <button type="submit" style="border: none; background: none; font-size: 18px;">🔍</button>
-    </div>
+        <div class="search-box">
+            <input type="text" name="title" placeholder="도서 검색">
+            <button type="submit">🔍</button>
+        </div>
+    </form>
 </div>
-
-</form>
 </body>
+
 </html>
