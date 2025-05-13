@@ -1,76 +1,68 @@
 package bookgle.bookgle.search.controller;
 
+import bookgle.bookgle.dto.BookAvailabilityDto;
+import bookgle.bookgle.dto.SearchBooksDto;
+import bookgle.bookgle.dto.SearchLibrariesDto;
+import bookgle.bookgle.exception.ExceptionStatus;
 import bookgle.bookgle.exception.ServiceException;
 import bookgle.bookgle.search.config.NaverMapsProperties;
 import bookgle.bookgle.search.domain.Book;
 import bookgle.bookgle.search.domain.Library;
 import bookgle.bookgle.search.service.SearchService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.util.List;
 
-@Controller
+@RestController
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class SearchController {
     private final SearchService searchService;
     private final NaverMapsProperties naverMapsProperties;
 
-    @GetMapping("/")
-    public String welcome() {
-        return "main.html";
-    }
-
     // 유저가 검색한 책 제목과 동일한 책들의 목록을 찾아서 보여줍니다.
     @GetMapping("/search/books")
-    public String searchBooks(Model model, String title, String[] region) throws IOException {
+    public SearchBooksDto searchBooks(String title) throws IOException {
         // 유저가 입력한 책 제목으로 isbn을 검색한다.
         List<Book> books;
         try {
             books = searchService.searchBooks(title);
         } catch (ServiceException e) {
-            return "error.html";
+            throw new ServiceException(ExceptionStatus.NOT_FOUND_BOOK);
         }
 
-        // 유저가 입력한 책 제목과 동일한 제목의 책 목록을 보여준다.
-        model.addAttribute("books", books);
-        model.addAttribute("booksCount", books.size());
+        // 유저가 입력한 책 제목과 동일한 제목의 책 목록에 대한 데이터를 보낸다.
+        SearchBooksDto searchBooksDto = new SearchBooksDto(books, books.size());
 
-        // 유저가 지역을 선택하지 않았을 경우 서울이 default 값
-        if (region == null)
-            model.addAttribute("regions", "서울");
-        else
-            model.addAttribute("regions", region);
-
-        return "bookList.html";
+        return searchBooksDto;
     }
 
     // 책 목록 중에서 유저가 선택한 책을 소장하고 있는 도서관들을 찾아서 보여줍니다.
     @GetMapping("/search/libraries")
-    public String searchLibraries(Model model, String isbn, String[] regions) throws IOException {
+    public SearchLibrariesDto searchLibraries(String isbn, String[] regions) throws IOException {
         // 유저가 선택한 책의 isbn을 통해서 해당 책을 소장하고 있는 도서관들을 찾는다.
         List<Library> libraries = searchService.searchLibraries(isbn, regions);
 
-        // map에 도서관들을 마커로 표시해서 보여준다.
-        model.addAttribute("libraries", libraries);
-        model.addAttribute("clientId", naverMapsProperties.getClientId());
-        model.addAttribute("isbn", isbn);
+        SearchLibrariesDto searchLibrariesDto = new SearchLibrariesDto(libraries, naverMapsProperties.getClientId(), isbn);
 
-        return "map.html";
+        return searchLibrariesDto;
     }
 
     // 유저가 선택한 도서관에서 유저가 빌리고자 하는 책의 대출가능여부를 보여줍니다.
     @GetMapping("/search/isAvailable")
-    @ResponseBody
-    public String checkAvailable(String libCode, String isbn) {
+    public BookAvailabilityDto checkAvailable(String libCode, String isbn) {
         boolean result = searchService.isBookAvailable(libCode, isbn);
 
+        BookAvailabilityDto bookAvailabilityDto = new BookAvailabilityDto();
         if (result)
-            return "대출 가능";
-        return "대출 불가";
+            bookAvailabilityDto.setMessage("대출 가능");
+        else
+            bookAvailabilityDto.setMessage("대출 불가");
+
+        return bookAvailabilityDto;
     }
 }
