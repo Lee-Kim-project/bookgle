@@ -5,7 +5,8 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 public enum ExceptionStatus {
-    NOT_FOUND_BOOK(HttpStatus.NOT_FOUND, "검색한 책이 존재하지 않습니다.");
+    NOT_FOUND_BOOK(HttpStatus.NOT_FOUND, "검색한 책이 존재하지 않습니다."),
+    ILLEGAL_SEARCH_OPTION(HttpStatus.BAD_REQUEST, "잘못된 검색 옵션입니다.");
 
     final HttpStatus httpStatus;
     final String message;
