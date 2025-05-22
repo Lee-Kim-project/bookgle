@@ -1,5 +1,7 @@
 package bookgle.bookgle.search.service;
 
+import bookgle.bookgle.exception.ExceptionStatus;
+import bookgle.bookgle.exception.ServiceException;
 import bookgle.bookgle.search.config.NaruProperties;
 import bookgle.bookgle.search.config.NaverMapsProperties;
 import bookgle.bookgle.search.domain.*;
@@ -12,10 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class SearchService {
@@ -25,7 +24,7 @@ public class SearchService {
     private final WebClient webClient;
     private final LibraryRepository libraryRepository;
     private final ObjectMapper objectMapper;
-
+    private static final Set<String> searchOptions = Set.of("title", "author", "publisher");
 
     public SearchService(NaruProperties naruProperties, NaverMapsProperties naverMapsProperties, LibraryRepository libraryRepository, ObjectMapper objectMapper) {
         this.naruProperties = naruProperties;
@@ -36,7 +35,12 @@ public class SearchService {
     }
 
     // 유저가 입력한 책 제목과 동일한 제목을 가진 책들을 찾습니다.
-    public List<Book> searchBooks(String title) throws JsonProcessingException {
+    public List<Book> searchBooks(String searchOption, String keyword) throws JsonProcessingException {
+        // searchOption은 title, author, publisher의 3가지만 가능
+        if (!searchOptions.contains(searchOption)) {
+            throw new ServiceException(ExceptionStatus.ILLEGAL_SEARCH_OPTION);
+        }
+
         Optional<JsonNode> response = Optional.ofNullable(webClient
                 .get()
                 .uri(uriBuilder -> uriBuilder
@@ -44,7 +48,7 @@ public class SearchService {
                         .host(NaruUrl.HOST.get())
                         .path(NaruUrl.BOOKS_INFO.get())
                         .queryParam("authKey", naruProperties.getApiKey())
-                        .queryParam("title", "\"" + title + "\"")
+                        .queryParam(searchOption, "\"" + keyword + "\"")
                         .queryParam("pageSize", 100)
                         .queryParam("format", "json")
                         .build())

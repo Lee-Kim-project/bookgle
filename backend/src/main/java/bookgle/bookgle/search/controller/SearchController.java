@@ -3,8 +3,6 @@ package bookgle.bookgle.search.controller;
 import bookgle.bookgle.dto.BookAvailabilityDto;
 import bookgle.bookgle.dto.SearchBooksDto;
 import bookgle.bookgle.dto.SearchLibrariesDto;
-import bookgle.bookgle.exception.ExceptionStatus;
-import bookgle.bookgle.exception.ServiceException;
 import bookgle.bookgle.search.config.NaverMapsProperties;
 import bookgle.bookgle.search.domain.Book;
 import bookgle.bookgle.search.domain.Library;
@@ -24,18 +22,12 @@ public class SearchController {
     private final SearchService searchService;
     private final NaverMapsProperties naverMapsProperties;
 
-    // 유저가 검색한 책 제목과 동일한 책들의 목록을 찾아서 보여줍니다.
+    // 유저가 선택한 검색 옵션과 키워드로 찾은 책들의 목록을 보여줍니다.
     @GetMapping("/search/books")
-    public SearchBooksDto searchBooks(String title) throws IOException {
-        // 유저가 입력한 책 제목으로 isbn을 검색한다.
+    public SearchBooksDto searchBooks(String searchOption, String keyword) throws IOException {
         List<Book> books;
-        try {
-            books = searchService.searchBooks(title);
-        } catch (ServiceException e) {
-            throw new ServiceException(ExceptionStatus.NOT_FOUND_BOOK);
-        }
+        books = searchService.searchBooks(searchOption, keyword);
 
-        // 유저가 입력한 책 제목과 동일한 제목의 책 목록에 대한 데이터를 보낸다.
         SearchBooksDto searchBooksDto = new SearchBooksDto(books, books.size());
 
         return searchBooksDto;
