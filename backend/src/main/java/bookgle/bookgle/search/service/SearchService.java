@@ -120,7 +120,10 @@ public class SearchService {
             for (Library library : libraries) {
                 // 모든 주소가 "시 구 ~" 형태이므로 1번째 인덱스에 있는 값이 구에 대한 정보
                 String district = library.getAddress().split(" ")[1];
-                if (Arrays.stream(regions).anyMatch(region -> region.equals(district)))
+                // 지역 문자열에서 한글만 제외하고 나머지 문자 모두 제거 후 지역 필터링
+                if (Arrays.stream(regions)
+                        .map(region -> region.replaceAll("[^가-힣]", ""))
+                        .anyMatch(region -> region.equals(district)))
                     librariesByRegion.add(library);
             }
             libraries = librariesByRegion;
