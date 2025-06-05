@@ -47,5 +47,6 @@ public class DbInitializer {
             searchService.updateLntLngOfLibraryFromApi(library);
         }
         searchService.saveLibraries(libraries);
+        System.out.println("DB 초기화를 완료했습니다.");
     }
 }

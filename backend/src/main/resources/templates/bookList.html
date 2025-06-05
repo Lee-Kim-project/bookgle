@@ -1,29 +1,138 @@
-<!doctype html>
-<html lang="en">
-<head>
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:inline="text">
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-    <link href="/main.css" rel="stylesheet">
+    <title> [[${bookTitle}]] 검색 결과 | 책장</title>
+    <link rel="stylesheet" href="/css/bookList.css">
 </head>
 <body>
-<div>
-    <h3 th:text="'검색결과 : ' +${booksCount}"></h3>
+
+<!-- 상단 검색창 -->
+<div class="search-container">
+    <form action="/search/books" method="GET" class="search-form">
+        <select name="category" class="search-select">
+            <option value="title">도서명</option>
+            <option value="author">저자명</option>
+            <option value="publisher">출판사</option>
+        </select>
+        <span class="divider"></span>
+        <input type="text" name="title" placeholder="도서 검색" class="search-input">
+        <button type="submit" class="search-button">🔍</button>
+    </form>
 </div>
 
-<div class="card" th:each="book : ${books}"> <!-- th:each : div 영역에 대한 반복 -->
-
-    <div>
-        <h4>
-            <a th:href="@{/search/libraries(isbn=${book.getIsbn()}, regions=${regions})}" th:text="${book.getTitle()}"></a>
-        </h4>
-        <p th:text="${book.getAuthors()}"></p>
-        <p th:text="${book.getPublisher()}"></p>
-        <p th:text="${book.getPublicationYear()}"></p>
-        <p th:text="${book.getIsbn()}"></p>
+<!--검색결과 & 지역 선택 드롭다운-->
+<div class="navbar">
+    <span class="count">전체 <span th:text="${booksCount}"></span>건</span>
+    <div class="regionDropdown">
+        <button class="dropdown-toggle">지역 선택 ▼</button>
+        <div class="dropdown-menu" id="regionDropdown">
+            <label><input type="checkbox" name="region" value="서울" checked>서울 전체</label>
+            <label><input type="checkbox" name="region" value="강남구">강남구</label>
+            <label><input type="checkbox" name="region" value="강동구">강동구</label>
+            <label><input type="checkbox" name="region" value="강북구">강북구</label>
+            <label><input type="checkbox" name="region" value="강서구">강서구</label>
+            <label><input type="checkbox" name="region" value="관악구">관악구</label>
+            <label><input type="checkbox" name="region" value="광진구">광진구</label>
+            <label><input type="checkbox" name="region" value="구로구">구로구</label>
+            <label><input type="checkbox" name="region" value="금천구">금천구</label>
+            <label><input type="checkbox" name="region" value="노원구">노원구</label>
+            <label><input type="checkbox" name="region" value="도봉구">도봉구</label>
+            <label><input type="checkbox" name="region" value="동대문구">동대문구</label>
+            <label><input type="checkbox" name="region" value="동작구">동작구</label>
+            <label><input type="checkbox" name="region" value="마포구">마포구</label>
+            <label><input type="checkbox" name="region" value="서대문구">서대문구</label>
+            <label><input type="checkbox" name="region" value="서초구">서초구</label>
+            <label><input type="checkbox" name="region" value="성동구">성동구</label>
+            <label><input type="checkbox" name="region" value="성북구">성북구</label>
+            <label><input type="checkbox" name="region" value="송파구">송파구</label>
+            <label><input type="checkbox" name="region" value="양천구">양천구</label>
+            <label><input type="checkbox" name="region" value="영등포구">영등포구</label>
+            <label><input type="checkbox" name="region" value="용산구">용산구</label>
+            <label><input type="checkbox" name="region" value="은평구">은평구</label>
+            <label><input type="checkbox" name="region" value="종로구">종로구</label>
+            <label><input type="checkbox" name="region" value="중구">중구</label>
+            <label><input type="checkbox" name="region" value="중랑구">중랑구</label>
+        </div>
     </div>
 </div>
+
+<!--책 정보-->
+<div class="container">
+    <div class="book-card" th:each="book : ${books}">
+        <div class="thumbnail">
+            <img th:src="${book.imageUrl}" alt="book thumbnail">
+        </div>
+
+        <div class="info">
+            <h4 class="title" th:text="${book.title}"></h4>
+            <p><strong>저자</strong> : <span th:text="${book.authors}"></span></p>
+            <p><strong>출판사</strong> : <span th:text="${book.publisher}"></span></p>
+            <p><strong>출판일</strong> : <span th:text="${book.publicationYear}"></span></p>
+        </div>
+
+        <!--지도 버튼-->
+        <button class="map-button" th:attr="isbn=${book.isbn}">지도</button>
+
+        <!--좋아요 버튼-->
+        <div class="favorite">
+            <button class="heart-button">❤️</button>
+        </div>
+    </div>
+</div>
+
+<!--지역 선택 드롭다운 토글 관련 동작-->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const toggleBtn = document.querySelector(".dropdown-toggle");
+    const dropdownMenu = document.getElementById("regionDropdown");
+
+    // 드롭다운 열기/닫기
+    toggleBtn.addEventListener("click", function (e) {
+      e.stopPropagation(); // 버튼 클릭 시 이벤트 전파 막기
+      dropdownMenu.style.display = (dropdownMenu.style.display === "none" || dropdownMenu.style.display === "")
+        ? "block"
+        : "none";
+    });
+
+    // ✅ 드롭다운 내부 클릭 시 이벤트 전파 막기 (닫히지 않도록)
+    dropdownMenu.addEventListener("click", function (e) {
+      e.stopPropagation();
+    });
+
+    // 바깥 클릭하면 닫기
+    document.addEventListener("click", function () {
+      dropdownMenu.style.display = "none";
+    });
+  });
+</script>
+
+
+<!--지도 버튼 클릭 시 선택된 지역들과 선택된 책의 isbn값을 search/libraries로 전송 -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".map-button").forEach(function (button) {
+      button.addEventListener("click", function () {
+        const isbn = button.getAttribute("isbn");
+
+        // 체크된 지역 수집
+        const checkedRegions = Array.from(document.querySelectorAll('input[name="region"]:checked'))
+          .map(input => input.value);
+
+        // 쿼리스트링 구성
+        const params = new URLSearchParams();
+        params.append("isbn", isbn);
+        checkedRegions.forEach(region => params.append("regions", region));
+
+        window.location.href = `/search/libraries?${params.toString()}`;
+
+        // 페이지 이동
+        window.location.href = `/search/libraries?${queryString}`;
+      });
+    });
+  });
+</script>
+
 </body>
 </html>
+
