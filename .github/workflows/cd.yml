@@ -1,9 +1,10 @@
 name: backend CD
 
 #on:
-#  pull_request:
+##  pull_request:
+#  push:
 #    branches: [main, dev]
-#    types: [opened, reopened]
+##    types: [opened, reopened]
 
 on:
   workflow_run:
@@ -18,6 +19,11 @@ jobs:
        (github.event.workflow_run.head_branch == 'main' || github.event.workflow_run.head_branch == 'dev')
     runs-on: ubuntu-latest
     steps:
+      - name: Debug Info
+        run: |
+          echo "Branch: ${{ github.event.workflow_run.head_branch }}"
+          echo "Conclusion: ${{ github.event.workflow_run.conclusion }}"
+
       - name: Set Spring Config Location
         run: echo "SPRING_CONFIG_ADDITIONAL_LOCATION=file:${{ github.workspace }}/config/" >> $GITHUB_ENV
 
