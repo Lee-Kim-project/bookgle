@@ -123,4 +123,5 @@ jobs:
             docker stop $(docker ps -aq)
             docker rm $(docker ps -aq)
             docker rmi $(docker images -q)
-            /usr/local/bin/docker-compose up -d --pull always
+#            /usr/local/bin/docker-compose up -d --pull always
+            docker-compose up -d --pull always
