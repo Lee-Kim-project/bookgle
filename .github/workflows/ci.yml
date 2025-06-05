@@ -2,14 +2,15 @@ name: backend CI
 
 on:
   push:
-    branches:
-      - '**'
-  pull_request:
-    branches: [main, dev]
-    types: [opened, synchronize, reopened]
+#    branches:
+#      - '**'
+#  pull_request:
+#    branches: [main, dev]
+#    types: [opened, synchronize, reopened]
 
 jobs:
   build:
+    if: github.ref != 'refs/heads/main' && github.ref != 'refs/heads/dev'
     runs-on: ubuntu-latest
     steps:
       - name: Set Spring Config Location

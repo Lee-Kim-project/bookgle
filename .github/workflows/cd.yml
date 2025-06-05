@@ -1,16 +1,16 @@
 name: backend CD
 
-#on:
-##  pull_request:
-#  push:
-#    branches: [main, dev]
-##    types: [opened, reopened]
-
 on:
-  workflow_run:
-    workflows: ["backend CI"]  # CI 워크플로우 이름과 정확히 일치해야 함
-    types:
-      - completed
+#  pull_request:
+  push:
+    branches: [main, dev]
+#    types: [opened, reopened]
+
+#on:
+#  workflow_run:
+#    workflows: ["backend CI"]  # CI 워크플로우 이름과 정확히 일치해야 함
+#    types:
+#      - completed
 
 jobs:
   deploy:
@@ -19,10 +19,10 @@ jobs:
 #       (github.event.workflow_run.head_branch == 'main' || github.event.workflow_run.head_branch == 'dev')
     runs-on: ubuntu-latest
     steps:
-      - name: Debug Info
-        run: |
-          echo "Branch: ${{ github.event.workflow_run.head_branch }}"
-          echo "Conclusion: ${{ github.event.workflow_run.conclusion }}"
+#      - name: Debug Info
+#        run: |
+#          echo "Branch: ${{ github.event.workflow_run.head_branch }}"
+#          echo "Conclusion: ${{ github.event.workflow_run.conclusion }}"
 
       - name: Set Spring Config Location
         run: echo "SPRING_CONFIG_ADDITIONAL_LOCATION=file:${{ github.workspace }}/config/" >> $GITHUB_ENV
