@@ -1,12 +1,21 @@
 name: backend CD
 
+#on:
+#  pull_request:
+#    branches: [main, dev]
+#    types: [opened, reopened]
+
 on:
-  pull_request:
-    branches: [main, dev]
-    types: [opened, reopened]
+  workflow_run:
+    workflows: ["backend CI"]  # CI 워크플로우 이름과 정확히 일치해야 함
+    types:
+      - completed
 
 jobs:
-  build:
+  deploy:
+    if: |
+      github.event.workflow_run.conclusion == 'success' &&
+       (github.event.workflow_run.head_branch == 'main' || github.event.workflow_run.head_branch == 'dev')
     runs-on: ubuntu-latest
     steps:
       - name: Set Spring Config Location
@@ -101,19 +110,8 @@ jobs:
           port: ${{ secrets.SERVER_SSH_PORT }}
           script: |
             echo "COMMIT_HASH=${{ github.sha }}" > .env
-            # export COMMIT_HASH=$(git log -1 --format=%H)
+            export COMMIT_HASH=$(git log -1 --format=%H)
             source ~/.zshrc
-            #            /bin/rm -rf bookgle
-            #            /bin/mkdir bookgle
-            #            cd bookgle
-            #            /usr/bin/git init
-            #            /usr/bin/git remote add origin https://github.com/Lee-Kim-project/bookgle.git
-            #            /usr/bin/git sparse-checkout init --cone
-            #            /usr/bin/git sparse-checkout set docker-compose-for-deployment.yml
-            #            /usr/bin/git pull origin main
-            #
-            #            /bin/mv docker-compose-for-deployment.yml docker-compose.yml.template
-            #            /opt/homebrew/bin/envsubst < docker-compose.yml.template > docker-compose.yml
 
             echo ${{ secrets.DOCKER_PASSWORD }} | docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin
             docker stop $(docker ps -aq)
