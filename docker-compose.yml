@@ -11,6 +11,7 @@ services:
       mariadb:
         condition: service_healthy
     restart: always
+    platform: linux/amd64
 
   nginx:
     image: noel95/bookgle:nginx
@@ -25,6 +26,7 @@ services:
     depends_on:
       - spring-server
     restart: always
+    platform: linux/amd64
 
   mariadb:
     image: noel95/bookgle:mariadb
@@ -43,6 +45,8 @@ services:
       - bookgle
     volumes:
       - bookgle_db:/var/lib/mysql
+    platform: linux/amd64
+
 volumes:
     bookgle_db:
 
