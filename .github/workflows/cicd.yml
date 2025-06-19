@@ -134,15 +134,15 @@ jobs:
           key: ${{ secrets.SERVER_SSH_PRIVATE }}
           port: ${{ secrets.SERVER_SSH_PORT }}
           script: |
-            cd bookgle
-            echo "COMMIT_HASH=${{ github.sha }}" > .env
-            export COMMIT_HASH=$(git log -1 --format=%H)
+#            cd bookgle
+#            echo "COMMIT_HASH=${{ github.sha }}" > .env
+#            export COMMIT_HASH=$(git log -1 --format=%H)
             export PATH=$PATH:/usr/local/bin
             source ~/.zshrc
-
+            curl -O https://raw.githubusercontent.com/CheckJang/bookgle/dev/docker-compose.yml
+                    
             echo ${{ secrets.DOCKER_PASSWORD }} | docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin
             docker stop $(docker ps -aq)
             docker rm $(docker ps -aq)
             docker rmi $(docker images -q)
-            # /usr/local/bin/docker-compose up -d --pull always
             docker-compose up -d --pull always
