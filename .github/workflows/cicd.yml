@@ -134,6 +134,7 @@ jobs:
           key: ${{ secrets.SERVER_SSH_PRIVATE }}
           port: ${{ secrets.SERVER_SSH_PORT }}
           script: |
+            cd bookgle
             echo "COMMIT_HASH=${{ github.sha }}" > .env
             export COMMIT_HASH=$(git log -1 --format=%H)
             source ~/.zshrc
