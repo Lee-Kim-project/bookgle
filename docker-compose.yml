@@ -1,6 +1,7 @@
 services:
   spring-server:
-    image: bookgle:1
+    image: noel95/bookgle:spring-server
+#    image: bookgle:1
     networks:
       - bookgle
     build:
@@ -12,7 +13,8 @@ services:
     restart: always
 
   nginx:
-    image: nginx:1
+    image: noel95/bookgle:nginx
+#    image: nginx:1
     ports:
       - 80:80
     networks:
@@ -25,7 +27,8 @@ services:
     restart: always
 
   mariadb:
-    image: mariadb:1
+    image: noel95/bookgle:mariadb
+#    image: mariadb:1
     build:
       context: .
       dockerfile: db/Dockerfile
